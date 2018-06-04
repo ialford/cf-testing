@@ -7,56 +7,70 @@ Description: CloudFormation to create a CodePipeline to test IAM Policies and Ro
 #     Value: !GetAtt LoadingDockS3Bucket.Arn
 #     Export:
 #       Name: LoadingDockS3Bucket
-Parameters:
-  Repo:
-    Type: String
-    Description: Repository Name (not repo URL)
-    Default: 'ndlib/esu-iam'
-  GitHubToken:
-    NoEcho: 'true'
-    Type: String
-    Description: Secret. OAuthToken with access to Repo. Long string of characters
-      and digits. Go to https://github.com/settings/tokens
-    Default: ''
-  GitHubUser:
-    Type: String
-    Description: GitHub UserName. This username must have access to the GitHubToken.
-    Default: ''
-  Branch:
-    Type: String
-    Description: The GitHub branch for the Pipeline to monitor.
-    Default: master
+# Parameters:
+#   Repo:
+#     Type: String
+#     Description: Repository Name (not repo URL)
+#     Default: 'ndlib/esu-iam'
+#   GitHubToken:
+#     NoEcho: 'true'
+#     Type: String
+#     Description: Secret. OAuthToken with access to Repo. Long string of characters
+#       and digits. Go to https://github.com/settings/tokens
+#     Default: ''
+#   GitHubUser:
+#     Type: String
+#     Description: GitHub UserName. This username must have access to the GitHubToken.
+#     Default: ''
+#   Branch:
+#     Type: String
+#     Description: The GitHub branch for the Pipeline to monitor.
+#     Default: master
 
 Resources:
-  DeveloperServiceRolePipeline:
-    Type: "AWS::CodePipeline::Pipeline"
+  CodePipelineIAMRole:
+    Type: AWS::IAM::Role
     Properties:
-      Name: 'DeveloperServiceRoles'
-      ArtifactStore:
-        Type: S3
-        Location: cf-templates-momt4hoqvkiv-us-east-1
-      RoleArn:
-        Fn::Sub: 'arn:aws:iam::${AWS::AccountId}:role/AWS-CodePipeline-Service'
-      Stages:
-      - Name: Source
-        Actions:
-        - InputArtifacts: []
-          Name: Source
-          ActionTypeId:
-            Category: Source
-            Owner: ThirdParty
-            Version: '1'
-            Provider: GitHub
-          # OutputArtifacts:
-          # - Name:
-          #     Ref: MyInputArtifacts
-          Configuration:
-            Owner:
-              Ref: GitHubUser
-            Repo:
-              Ref: Repo
-            Branch:
-              Ref: Branch
-            OAuthToken:
-              Ref: GitHubToken
-          RunOrder: 1
+      RoleName: lib-developer-cf-servicerole
+      Path: "/esu/service-role/"
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Sid: "TrustPolicyCloudFormationAssumption"
+            Effect: "Allow"
+            Principal:
+              Service:
+                - "cloudformation.amazonaws.com"
+            Action: sts:AssumeRole
+  # DeveloperServiceRolePipeline:
+  #   Type: "AWS::CodePipeline::Pipeline"
+  #   Properties:
+  #     Name: 'DeveloperServiceRoles'
+  #     ArtifactStore:
+  #       Type: S3
+  #       Location: cf-templates-momt4hoqvkiv-us-east-1
+  #     RoleArn:
+  #       Fn::Sub: 'arn:aws:iam::${AWS::AccountId}:role/AWS-CodePipeline-Service'
+  #     Stages:
+  #     - Name: Source
+  #       Actions:
+  #       - InputArtifacts: []
+  #         Name: Source
+  #         ActionTypeId:
+  #           Category: Source
+  #           Owner: ThirdParty
+  #           Version: '1'
+  #           Provider: GitHub
+  #         # OutputArtifacts:
+  #         # - Name:
+  #         #     Ref: MyInputArtifacts
+  #         Configuration:
+  #           Owner:
+  #             Ref: GitHubUser
+  #           Repo:
+  #             Ref: Repo
+  #           Branch:
+  #             Ref: Branch
+  #           OAuthToken:
+  #             Ref: GitHubToken
+  #         RunOrder: 1
