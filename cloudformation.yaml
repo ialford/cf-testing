@@ -32,6 +32,9 @@ Resources:
     Type: "AWS::CodePipeline::Pipeline"
     Properties:
       Name: 'DeveloperServiceRoles'
+      ArtifactStore:
+        Type: S3
+        Location: cf-templates-momt4hoqvkiv-us-east-1
       RoleArn:
         Fn::Sub: 'arn:aws:iam::${AWS::AccountId}:role/AWS-CodePipeline-Service'
       Stages:
