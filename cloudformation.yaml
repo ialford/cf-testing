@@ -8,10 +8,6 @@ Description: CloudFormation to create a CodePipeline to test IAM Policies and Ro
 #     Export:
 #       Name: LoadingDockS3Bucket
 Parameters:
-  CurrentAccountId:
-    Type: String
-    Default:
-      - Ref: "AWS::AccountId"
   Repo:
     Type: String
     Description: Repository Name (not repo URL)
@@ -37,4 +33,5 @@ Resources:
     Properties:
       Name: 'DeveloperServiceRoles'
       RoleArn:
-        - !Sub 'arn:aws:iam::${CurrentAccountId}:role/AWS-CodePipeline-Service'
+        -
+          !Sub 'arn:aws:iam::${AWS::AccountId}:role/AWS-CodePipeline-Service'
