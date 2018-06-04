@@ -9,6 +9,7 @@ Description: CloudFormation to create a CodePipeline to test IAM Policies and Ro
 #       Name: LoadingDockS3Bucket
 Parameters:
   CurrentAccountId:
+    Type" String
     Default: !Ref "AWS::AccountId"
   Repo:
     Type: String
