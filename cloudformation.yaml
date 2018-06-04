@@ -10,7 +10,8 @@ Description: CloudFormation to create a CodePipeline to test IAM Policies and Ro
 Parameters:
   CurrentAccountId:
     Type: String
-    Default: !Ref "AWS::AccountId"
+    Default:
+      - Ref: "AWS::AccountId"
   Repo:
     Type: String
     Description: Repository Name (not repo URL)
