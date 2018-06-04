@@ -17,11 +17,11 @@ Parameters:
     Type: String
     Description: Secret. OAuthToken with access to Repo. Long string of characters
       and digits. Go to https://github.com/settings/tokens
-    Default: 'd7d9141d5e22df93a00df01d4667b5327e8867b7'
+    Default: ''
   GitHubUser:
     Type: String
     Description: GitHub UserName. This username must have access to the GitHubToken.
-    Default: 'ialford'
+    Default: ''
   Branch:
     Type: String
     Description: The GitHub branch for the Pipeline to monitor.
