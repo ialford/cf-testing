@@ -34,3 +34,26 @@ Resources:
       Name: 'DeveloperServiceRoles'
       RoleArn:
         Fn::Sub: 'arn:aws:iam::${AWS::AccountId}:role/AWS-CodePipeline-Service'
+      Stages:
+      - Name: Source
+        Actions:
+        - InputArtifacts: []
+          Name: Source
+          ActionTypeId:
+            Category: Source
+            Owner: ThirdParty
+            Version: '1'
+            Provider: GitHub
+          # OutputArtifacts:
+          # - Name:
+          #     Ref: MyInputArtifacts
+          Configuration:
+            Owner:
+              Ref: GitHubUser
+            Repo:
+              Ref: Repo
+            Branch:
+              Ref: Branch
+            OAuthToken:
+              Ref: GitHubToken
+          RunOrder: 1
