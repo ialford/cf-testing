@@ -1,0 +1,31 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: CloudFormation to create an S3 Bucket for Loading Dock Purposes
+
+# add needed outputs here
+Outputs:
+  LoadingDockS3Bucket:
+    Value: !GetAtt LoadingDockS3Bucket.Arn
+    Export:
+      Name: LoadingDockS3Bucket
+
+
+Resources:
+  LoadingDockS3Bucket:
+    Type: "AWS::S3::Bucket"
+    Properties:
+      AccessControl: Private
+      BucketEncryption:
+        ServerSideEncryptionConfiguration:
+          - ServerSideEncryptionByDefault:
+              SSEAlgorithm: AES256
+      LifecycleConfiguration:
+        Rules:
+          - Id: "DeleteMacOS Sidecar"
+            Prefix: "."
+            Status: Enabled
+            ExpirationInDays: 1
+          - Id: "Transition to IA"
+            Status: Enabled
+            Transition:
+              TransitionInDays: 60
+              StorageClass: STANDARD_IA
