@@ -1,31 +1,36 @@
 AWSTemplateFormatVersion: "2010-09-09"
-Description: CloudFormation to create an S3 Bucket for Loading Dock Purposes
+Description: CloudFormation to create a CodePipeline to test IAM Policies and Roles
 
 # add needed outputs here
-Outputs:
-  LoadingDockS3Bucket:
-    Value: !GetAtt LoadingDockS3Bucket.Arn
-    Export:
-      Name: LoadingDockS3Bucket
-
+# Outputs:
+#   LoadingDockS3Bucket:
+#     Value: !GetAtt LoadingDockS3Bucket.Arn
+#     Export:
+#       Name: LoadingDockS3Bucket
+Parameters:
+  Repo:
+    Type: String
+    Description: Repository Name (not repo URL)
+    Default: ''
+  GitHubToken:
+    NoEcho: 'true'
+    Type: String
+    Description: Secret. OAuthToken with access to Repo. Long string of characters
+      and digits. Go to https://github.com/settings/tokens
+  GitHubUser:
+    Type: String
+    Description: GitHub UserName. This username must have access to the GitHubToken.
+    Default: ''
+  Branch:
+    Type: String
+    Description: The GitHub branch for the Pipeline to monitor.
+    Default: master
 
 Resources:
-  LoadingDockS3Bucket:
-    Type: "AWS::S3::Bucket"
+  DeveloperServiceRolePipeline:
+    Type: "AWS::CodePipeline::Pipeline"
     Properties:
-      AccessControl: Private
-      BucketEncryption:
-        ServerSideEncryptionConfiguration:
-          - ServerSideEncryptionByDefault:
-              SSEAlgorithm: AES256
-      LifecycleConfiguration:
-        Rules:
-          - Id: "DeleteMacOS Sidecar"
-            Prefix: "."
-            Status: Enabled
-            ExpirationInDays: 1
-          - Id: "Transition to IA"
-            Status: Enabled
-            Transition:
-              TransitionInDays: 60
-              StorageClass: STANDARD_IA
+      Name: 'DeveloperServiceRoles'
+      RoleArn:
+        -
+          !Sub 'arn:aws:iam::${{AWS::AccountId}}:role/AWS-CodePipeline-Service'
