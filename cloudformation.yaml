@@ -33,5 +33,4 @@ Resources:
     Properties:
       Name: 'DeveloperServiceRoles'
       RoleArn:
-        -
-          !Sub 'arn:aws:iam::${AWS::AccountId}:role/AWS-CodePipeline-Service'
+        Fn::Sub: 'arn:aws:iam::${AWS::AccountId}:role/AWS-CodePipeline-Service'
