@@ -29,3 +29,6 @@ Resources:
             Transition:
               TransitionInDays: 60
               StorageClass: STANDARD_IA
+      Tags:
+        Key: "service"
+        Value: "Testing out CD"
